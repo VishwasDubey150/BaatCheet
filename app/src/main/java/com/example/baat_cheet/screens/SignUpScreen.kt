@@ -1,6 +1,7 @@
 package com.example.baat_cheet.screens
 
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -33,13 +34,17 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.baat_cheet.BCViewModel
 import com.example.baat_cheet.DestinationScreen
+import com.example.baat_cheet.PB
 import com.example.baat_cheet.R
+import com.example.baat_cheet.checkSignedIn
 import com.example.baat_cheet.navigateTo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun  SignUpScreen( navController: NavController , vm:BCViewModel) {
 
+    
+    checkSignedIn(vm = vm, navcontroller = navController)
     Box(modifier = Modifier.fillMaxSize())
     {
         Column(modifier = Modifier
@@ -106,7 +111,13 @@ fun  SignUpScreen( navController: NavController , vm:BCViewModel) {
                     label = {Text(text = "password")},
                     modifier = Modifier.padding(8.dp))
                 
-                Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(top = 16.dp)) {
+                Button(onClick = {
+                                 vm.signUp(
+                                     nameState.value.text,
+                                     numberState.value.text,
+                                     emailState.value.text,
+                                     passwordState.value.text)},
+                    modifier = Modifier.padding(top = 16.dp)) {
                     Text(text = "Create Account")
 
                 }
@@ -114,9 +125,16 @@ fun  SignUpScreen( navController: NavController , vm:BCViewModel) {
                     fontSize = 12.sp,
                     fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(8.dp)
-                        .clickable { navigateTo(navController,DestinationScreen.Login.route) }
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .clickable { navigateTo(navController, DestinationScreen.Login.route) }
                 )
             }
     }
+
+    if(vm.inProgress.value==true)
+    {
+        PB()
+    }
+
 }
