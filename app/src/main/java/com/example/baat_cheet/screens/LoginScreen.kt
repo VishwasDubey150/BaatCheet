@@ -27,12 +27,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.baat_cheet.BCViewModel
 import com.example.baat_cheet.DestinationScreen
 import com.example.baat_cheet.R
 import com.example.baat_cheet.navigateTo
 
 @Composable
-fun LoginScreen( navController: NavController) {
+fun LoginScreen( navController: NavController,vm:BCViewModel) {
     Box(modifier = Modifier.fillMaxSize())
     {
         Column(modifier = Modifier
@@ -78,16 +79,11 @@ fun LoginScreen( navController: NavController) {
                 label = {Text(text = "password")},
                 modifier = Modifier.padding(8.dp))
 
-//            Button{
-////                vm.signI(
-////                    emailState.value.text,
-////                    passwordState.value.text)},
-////                modifier = Modifier.padding(top = 16.dp))
-//
-//                Text(text = "Log in")
-//            }
-
-            Button(onClick = { /*TODO*/ }) {
+            Button(onClick = {
+                vm.Login(
+                    emailState.value.text,
+                    passwordState.value.text)},
+            modifier= Modifier.padding(8.dp)){
                 Text(text = "Log in")
             }
 

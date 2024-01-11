@@ -63,7 +63,6 @@ class BCViewModel  @Inject constructor(
                         inProgress.value=false
                         signIn.value=true
                         createOrupdateProfile(name,number)
-//                Toast.makeText(context,"Account Created Successfull",Toast.LENGTH_SHORT).show()
                     }
                     else
                     {
@@ -141,6 +140,39 @@ class BCViewModel  @Inject constructor(
                 inProgress.value=false
             }
         }
+    }
+
+    fun Login(email:String,password:String)
+    {
+        inProgress.value=true
+
+        if(email.isEmpty() or password.isEmpty())
+        {
+            inProgress.value=false
+            handleException(customMessage = "Please fill all fields")
+            return
+        }
+        else{
+            auth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
+                @Composable
+                if(it.isSuccessful)
+                {
+                    inProgress.value=false
+                    signIn.value=true
+                    auth.currentUser?.uid?.let {
+                        getUserData(it)
+                    }
+//                Toast.makeText(context,"Account Created Successfull",Toast.LENGTH_SHORT).show()
+                }
+                else
+                {
+                    inProgress.value=false
+                    handleException(it.exception,"login Failed!!!")
+                }
+            }
+        }
+
+
     }
 
 }
