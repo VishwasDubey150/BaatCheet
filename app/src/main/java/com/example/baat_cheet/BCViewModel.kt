@@ -1,6 +1,7 @@
 package com.example.baat_cheet
 
 import android.media.Image
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -13,12 +14,15 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
+import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class BCViewModel  @Inject constructor(
 
+    val storage:FirebaseStorage,
     val auth: FirebaseAuth
 ): ViewModel()  {
 
@@ -31,6 +35,7 @@ class BCViewModel  @Inject constructor(
     val eventMustableState = mutableStateOf<Event<String>?>(null)
     var signIn = mutableStateOf(false)
     var userData = mutableStateOf<UserData?>(null)
+
 
     init {
 
@@ -175,5 +180,29 @@ class BCViewModel  @Inject constructor(
 
     }
 
+    fun uploadProfileImage(uri: Uri)
+    {
+        uploadImage(uri)
+        {
+            createOrupdateProfile(imageurl = it.toString())
+        }
+    }
+
+    private fun uploadImage(uri: Uri, onSuccess:(Uri)->Unit) {
+        inProgress.value=true
+        val storageref=storage.reference
+        val uuid = UUID.randomUUID()
+        val imageRef = storageref.child("image/$uuid")
+        val uploadTask=imageRef.putFile(uri)
+        uploadTask.addOnSuccessListener {
+            val result=it.metadata?.reference?.downloadUrl
+            result?.addOnSuccessListener(onSuccess)
+            inProgress.value=false
+        }
+            .addOnFailureListener{
+                handleException(it)
+            }
+
+    }
 }
 
