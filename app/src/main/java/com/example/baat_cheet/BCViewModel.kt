@@ -26,10 +26,6 @@ class BCViewModel  @Inject constructor(
     val auth: FirebaseAuth
 ): ViewModel()  {
 
-
-
-
-
     var db = Firebase.firestore
     var inProgress = mutableStateOf(false)
     val eventMustableState = mutableStateOf<Event<String>?>(null)
@@ -148,8 +144,10 @@ class BCViewModel  @Inject constructor(
     }
 
     fun Login(email:String,password:String)
+
     {
         inProgress.value=true
+
 
         if(email.isEmpty() or password.isEmpty())
         {
@@ -164,10 +162,11 @@ class BCViewModel  @Inject constructor(
                 {
                     inProgress.value=false
                     signIn.value=true
+
                     auth.currentUser?.uid?.let {
                         getUserData(it)
                     }
-//                Toast.makeText(context,"Account Created Successfull",Toast.LENGTH_SHORT).show()
+
                 }
                 else
                 {
@@ -204,5 +203,13 @@ class BCViewModel  @Inject constructor(
             }
 
     }
+
+    fun logout() {
+        auth.signOut()
+        signIn.value=false
+        userData.value=null
+        eventMustableState.value=Event("Logout")
+    }
+
 }
 

@@ -29,11 +29,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.baat_cheet.BCViewModel
 import com.example.baat_cheet.DestinationScreen
+import com.example.baat_cheet.PB
 import com.example.baat_cheet.R
+import com.example.baat_cheet.checkSignedIn
 import com.example.baat_cheet.navigateTo
 
 @Composable
 fun LoginScreen( navController: NavController,vm:BCViewModel) {
+
+    checkSignedIn(vm = vm, navcontroller = navController)
     Box(modifier = Modifier.fillMaxSize())
     {
         Column(modifier = Modifier
@@ -86,7 +90,6 @@ fun LoginScreen( navController: NavController,vm:BCViewModel) {
             modifier= Modifier.padding(8.dp)){
                 Text(text = "Log in")
             }
-
             Text(text = "Create account", color = Color.Gray,
                 fontSize = 12.sp,
                 fontFamily = FontFamily.SansSerif,
@@ -97,4 +100,9 @@ fun LoginScreen( navController: NavController,vm:BCViewModel) {
             )
         }
     }
+    if(vm.inProgress.value==true)
+    {
+        PB()
+    }
+
 }
